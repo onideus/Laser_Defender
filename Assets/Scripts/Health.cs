@@ -5,17 +5,15 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] int health = 50;
+    [SerializeField] private int health = 50;
 
     private void OnTriggerEnter2D(Collider2D col)
     {
-        DamageDealer damageDealer = col.gameObject.GetComponent<DamageDealer>();
+        var damageDealer = col.gameObject.GetComponent<DamageDealer>();
 
-        if (damageDealer != null)
-        {
-            TakeDamage(damageDealer.GetDamage());
-            damageDealer.Hit();
-        }
+        if (damageDealer == null) return;
+        TakeDamage(damageDealer.GetDamage());
+        damageDealer.Hit();
     }
     
     private void TakeDamage(int damage)
