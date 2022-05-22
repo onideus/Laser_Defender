@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Health : MonoBehaviour
@@ -12,9 +9,10 @@ public class Health : MonoBehaviour
     [SerializeField] private ParticleSystem hitEffect;
 
     [SerializeField] private bool applyCameraShake;
-    private CameraShake _cameraShake;
-    
+
     private AudioPlayer _audioPlayer;
+    private CameraShake _cameraShake;
+    private LevelManager _levelManager;
     private ScoreKeeper _scoreKeeper;
 
     private void Awake()
@@ -22,6 +20,7 @@ public class Health : MonoBehaviour
         _cameraShake = Camera.main.GetComponent<CameraShake>();
         _audioPlayer = FindObjectOfType<AudioPlayer>();
         _scoreKeeper = FindObjectOfType<ScoreKeeper>();
+        _levelManager = FindObjectOfType<LevelManager>();
     }
 
     private void OnTriggerEnter2D(Collider2D col)
@@ -55,13 +54,18 @@ public class Health : MonoBehaviour
 
     private void Die()
     {
-        if(!isPlayer)
+        if (!isPlayer)
         {
             _scoreKeeper.ModifyScore(scoreValue);
         }
+        else
+        {
+            _levelManager.LoadGameOver();
+        }
+
         Destroy(gameObject);
     }
-    
+
     private void PlayHitEffect()
     {
         if (hitEffect == null) return;

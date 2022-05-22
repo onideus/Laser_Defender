@@ -1,13 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ScoreKeeper : MonoBehaviour
 {
+    private static ScoreKeeper _instance;
     private int _score;
 
+    private void Awake()
+    {
+        ManageSingleton();
+    }
+
     public int GetScore() => _score;
-    
+
     public void ModifyScore(int amount)
     {
         _score += amount;
@@ -18,5 +22,19 @@ public class ScoreKeeper : MonoBehaviour
     public void ResetScore()
     {
         _score = 0;
+    }
+
+    private void ManageSingleton()
+    {
+        if (_instance != null)
+        {
+            gameObject.SetActive(false);
+            Destroy(gameObject);
+        }
+        else
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
     }
 }
